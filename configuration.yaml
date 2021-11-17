@@ -1,0 +1,27 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+
+template:
+  - sensor:
+    - name: "Power Circuit"
+      unit_of_measurement: "W"
+      state: "{{ states('sensor.channel_1_curent')|float * 20 * 120 }}"
+      device_class: power
+      
+sensor 1:
+  - platform: integration
+    source: sensor.power_circuit
+    name: 'Circuit 1 kWH'
+    unit_prefix: k
+    round: 3

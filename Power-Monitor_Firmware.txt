@@ -1,0 +1,45 @@
+esphome:
+  name: power-monitor
+  platform: ESP32
+  board: nodemcu-32s
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "7825cc44038bd5203162ebfff42a9987"
+
+wifi:
+  ssid: "My_Test"
+  password: "TestingTesting"
+
+
+i2c:
+  - id: bus_a
+    sda: 21
+    scl: 22
+    
+ads1115:
+  - address: 0x48
+    i2c_id: bus_a
+    id: adc0
+    continuous_mode: on
+
+
+sensor:
+  - platform: ads1115
+    ads1115_id: adc0
+    multiplexer: 'A0_A1'
+    gain: 2.048
+    update_interval: 2s
+    name: "Channe 1 RAW"
+    accuracy_decimals: 3
+    id: chan1
+
+  - platform: ct_clamp
+    sensor: chan1
+    name: "Channel 1 Curent"
+    update_interval: 3s
